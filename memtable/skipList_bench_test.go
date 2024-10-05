@@ -40,7 +40,7 @@ func BenchmarkSkiplistSearch(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		key := []byte{byte(i % 100000)} // 随机搜索已插入的键
-		s.Search(key)
+		s.Get(key)
 	}
 }
 

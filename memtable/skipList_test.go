@@ -11,21 +11,21 @@ func TestAdd(t *testing.T) {
 	skipList.Put([]byte{1}, []byte{1})
 	skipList.Put([]byte{2}, []byte{2})
 	skipList.Put([]byte{3}, []byte{3})
-	value, ok := skipList.Search([]byte{0})
+	value, ok := skipList.Get([]byte{0})
 	fmt.Println("search 0 = ", value, " ok = ", ok)
 	skipList.Put([]byte{4}, []byte{4})
-	value, ok = skipList.Search([]byte{1})
+	value, ok = skipList.Get([]byte{1})
 	fmt.Println("search 1 = ", value, " ok = ", ok)
 	skipList.Erase([]byte{0})
 	skipList.Erase([]byte{1})
-	value, ok = skipList.Search([]byte{1})
+	value, ok = skipList.Get([]byte{1})
 	fmt.Println("search 1 = ", value, " ok = ", ok)
 }
 
 func TestEmptySkiplistSearch(t *testing.T) {
 	s := NewSkipList()
 	key := []byte("key1")
-	if _, found := s.Search(key); found {
+	if _, found := s.Get(key); found {
 		t.Errorf("Expected key %s to not be found in empty skiplist", key)
 	}
 }
@@ -36,7 +36,7 @@ func TestSkiplistInsertAndSearch(t *testing.T) {
 	value := []byte("value1")
 
 	s.Put(key, value)
-	got, found := s.Search(key)
+	got, found := s.Get(key)
 
 	if !found {
 		t.Errorf("Expected key %s to be found", key)
@@ -56,7 +56,7 @@ func TestSkiplistOverwriteValue(t *testing.T) {
 	s.Put(key, value1)
 	s.Put(key, value2)
 
-	got, found := s.Search(key)
+	got, found := s.Get(key)
 
 	if !found {
 		t.Errorf("Expected key %s to be found", key)
@@ -82,12 +82,12 @@ func TestSkiplistErase(t *testing.T) {
 	s.Erase(key1)
 
 	// key1 应该被删除，找不到
-	if _, found := s.Search(key1); found {
+	if _, found := s.Get(key1); found {
 		t.Errorf("Expected key %s to be erased", key1)
 	}
 
 	// key2 应该仍然存在
-	if got, found := s.Search(key2); !found || !bytes.Equal(got, value2) {
+	if got, found := s.Get(key2); !found || !bytes.Equal(got, value2) {
 		t.Errorf("Expected key %s to be found with value %s", key2, value2)
 	}
 }
@@ -126,7 +126,7 @@ func TestSkiplistRandomInsertErase(t *testing.T) {
 		if i == 1 {
 			continue // 跳过已删除的键
 		}
-		if got, found := s.Search(key); !found || !bytes.Equal(got, values[i]) {
+		if got, found := s.Get(key); !found || !bytes.Equal(got, values[i]) {
 			t.Errorf("Expected key %s to be found with value %s", key, values[i])
 		}
 	}
